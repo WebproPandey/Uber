@@ -312,3 +312,129 @@ Example Response:
    ```
 
 
+
+# Captain Registration API Documentation
+
+This document outlines the `Captain Registration API` endpoint, including the request and response format, validation rules, and example usage.
+
+---
+
+## Endpoint: `/captains/register`
+
+### Description
+Registers a new captain by creating an account with the provided user and vehicle details.
+
+---
+
+### HTTP Method
+`POST`
+
+---
+
+### Request Body
+The request body should be in JSON format and include the following fields:
+
+#### User Details
+| Field          | Type    | Required | Description                                      |
+|----------------|---------|----------|--------------------------------------------------|
+| fullname       | object  | Yes      | Contains the captain's first and last name.     |
+| ├── firstname  | string  | Yes      | Captain's first name (minimum 4 characters).    |
+| └── lastname   | string  | No       | Captain's last name (optional).                 |
+| email          | string  | Yes      | Captain's email address (must be a valid email).|
+| password       | string  | Yes      | Captain's password (minimum 8 characters).      |
+
+#### Vehicle Details
+| Field            | Type    | Required | Description                                     |
+|------------------|---------|----------|-------------------------------------------------|
+| vehicle          | object  | Yes      | Contains details about the captain's vehicle.   |
+| ├── color        | string  | Yes      | Vehicle color (must be one of: red, blue, green, yellow). |
+| ├── plate        | string  | Yes      | Vehicle plate number (required).               |
+| ├── capacity     | integer | Yes      | Vehicle capacity (must be at least 1).         |
+| └── vehicleType  | string  | Yes      | Vehicle type (must be one of: motorcycle, car, auto3). |
+
+#### Example Request:
+```json
+{
+  "fullname": {
+    "firstname": "John",
+    "lastname": "Doe"
+  },
+  "email": "john.doe@example.com",
+  "password": "securepassword123",
+  "vehicle": {
+    "color": "blue",
+    "plate": "ABC1234",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+---
+
+### Response
+
+| Field            | Type    | Description                                     |
+|------------------|---------|-------------------------------------------------|
+| message          | string  | Success message.                               |
+| captain          | object  | Contains the registered captain's details.     |
+| ├── fullname     | object  | Captain's full name.                           |
+| │   ├── firstname| string  | Captain's first name.                          |
+| │   └── lastname | string  | Captain's last name.                           |
+| ├── email        | string  | Captain's email address.                       |
+| ├── password     | string  | Captain's hashed password.                     |
+| └── vehicle      | object  | Contains the captain's vehicle details.        |
+
+#### Example Response:
+```json
+{
+  "message": "Captain registered successfully",
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "password": "$2b$10$abcdef1234567890hashedpassword",
+    "vehicle": {
+      "color": "blue",
+      "plate": "ABC1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+### Validation Rules
+
+#### User Details:
+- **Firstname**: Must be a string with a minimum length of 4 characters.
+- **Lastname**: Optional but must be a string if provided.
+- **Email**: Must be in a valid email format.
+- **Password**: Must be a string with a minimum length of 8 characters.
+
+#### Vehicle Details:
+- **Color**: Must be one of: `red`, `blue`, `green`, `yellow`.
+- **Plate**: Must be a non-empty string.
+- **Capacity**: Must be an integer greater than or equal to 1.
+- **Vehicle Type**: Must be one of: `motorcycle`, `car`, `auto3`.
+
+---
+
+### Status Codes
+
+| Code | Description                          |
+|------|--------------------------------------|
+| 201  | Captain registered successfully.     |
+| 400  | Validation error in request payload. |
+| 500  | Internal server error.               |
+
+---
+
+### Notes
+- Make sure the `Content-Type` header is set to `application/json`.
+- Store passwords securely using hashing (e.g., bcrypt).
+- Use JWT for secure authentication in subsequent requests.
