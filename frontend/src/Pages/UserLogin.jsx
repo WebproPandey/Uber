@@ -21,9 +21,9 @@ const UserLogin = () => {
 
   return (
     <div className="w-full h-screen bg-[#121212] flex  flex-col justify-between items-center">
-      <div className=" rounded-t-lg flex justify-center items-center mt-4">
-                <img className='w-[8rem]' src={logo} alt="" />
-      </div>
+       <div className=" rounded-t-lg  flex justify-center items-center mt-4 px-4">
+              <img className="w-[12rem] " src={logo} alt="" />
+        </div>
       <div className=" h-[80%] w-full bg-white rounded-tl-[50px] p-8">
        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
        <form  onSubmit={(e) => submitHandler(e)} className="flex flex-col">
@@ -56,7 +56,7 @@ const UserLogin = () => {
           Sign Up
         </Link>
         </p>
-        <Link to='/Captain-Login' className="bg-[#10b461] flex justify-center items-center  text-white rounded-lg p-2 w-full hover:bg-gray-800 transition mt-4">
+        <Link to='/Captain-Signup' className="bg-[#10b461] flex justify-center items-center  text-white rounded-lg p-2 w-full hover:bg-gray-800 transition mt-4">
           Sign in as Captain
         </Link>
       </div>
