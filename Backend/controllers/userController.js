@@ -22,6 +22,7 @@ module.exports.registerUser =  async (req , res, next) =>{
     password: hashedPassword,
   })
   const  token = user.generateAuthToken()
+  res.cookie('token' ,token)
   res.status(201).json({
     message: 'User registered successfully',
     user,
@@ -45,6 +46,7 @@ module.exports.loginUser =  async (req , res, next) => {
   }
   const token = user.generateAuthToken()
   res.cookie('token' , token)
+  console.log(token)
   res.json({message: 'User logged in successfully', token ,  user})
 }
 

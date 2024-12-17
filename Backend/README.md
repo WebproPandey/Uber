@@ -438,3 +438,192 @@ The request body should be in JSON format and include the following fields:
 - Make sure the `Content-Type` header is set to `application/json`.
 - Store passwords securely using hashing (e.g., bcrypt).
 - Use JWT for secure authentication in subsequent requests.
+
+
+
+## Endpoint: `/captains/login`
+
+### Description
+Logs in a registered captain and returns an authentication token.
+
+---
+
+### HTTP Method
+`POST`
+
+---
+
+### Request Body
+The request body should be in JSON format and include the following fields:
+
+#### Fields
+| Field     | Type    | Required | Description                          |
+|-----------|---------|----------|--------------------------------------|
+| email     | string  | Yes      | Captain's registered email address.  |
+| password  | string  | Yes      | Captain's password.                  |
+
+#### Example Request:
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "securepassword123"
+}
+```
+
+---
+
+### Response
+
+| Field            | Type    | Description                               |
+|------------------|---------|-------------------------------------------|
+| message          | string  | Success message.                         |
+| token            | string  | JWT token for authentication.            |
+
+#### Example Response:
+```json
+{
+  "message": "Login successful",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+---
+
+### Status Codes
+
+| Code | Description                          |
+|------|--------------------------------------|
+| 200  | Login successful.                    |
+| 400  | Validation error in request payload. |
+| 401  | Invalid credentials.                 |
+| 500  | Internal server error.               |
+
+---
+
+## Endpoint: `/captains/logout`
+
+### Description
+Logs out the currently authenticated captain.
+
+---
+
+### HTTP Method
+`POST`
+
+---
+
+### Headers
+
+| Field           | Type   | Required | Description                      |
+|-----------------|--------|----------|----------------------------------|
+| Authorization   | string | Yes      | Bearer token for authentication. |
+
+#### Example Request:
+```http
+POST /captains/logout
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+---
+
+### Response
+
+| Field     | Type    | Description                 |
+|-----------|---------|-----------------------------|
+| message   | string  | Success message.           |
+
+#### Example Response:
+```json
+{
+  "message": "Logout successful"
+}
+```
+
+---
+
+### Status Codes
+
+| Code | Description                          |
+|------|--------------------------------------|
+| 200  | Logout successful.                   |
+| 401  | Unauthorized (invalid or expired token). |
+| 500  | Internal server error.               |
+
+---
+
+## Endpoint: `/captains/profile`
+
+### Description
+Fetches the profile details of the currently authenticated captain.
+
+---
+
+### HTTP Method
+`GET`
+
+---
+
+### Headers
+
+| Field           | Type   | Required | Description                      |
+|-----------------|--------|----------|----------------------------------|
+| Authorization   | string | Yes      | Bearer token for authentication. |
+
+#### Example Request:
+```http
+GET /captains/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+---
+
+### Response
+
+| Field            | Type    | Description                               |
+|------------------|---------|-------------------------------------------|
+| message          | string  | Success message.                         |
+| captain          | object  | Contains the captain's profile details.  |
+| ├─ fullname     | object  | Captain's full name.                     |
+| │   ├─ firstname| string  | Captain's first name.                    |
+| │   └─ lastname | string  | Captain's last name.                     |
+| ├─ email        | string  | Captain's email address.                 |
+| └─ vehicle      | object  | Captain's vehicle details.               |
+
+#### Example Response:
+```json
+{
+  "message": "Profile fetched successfully",
+  "captain": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "vehicle": {
+      "color": "blue",
+      "plate": "ABC1234",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+---
+
+### Summary of Routes
+
+| Method | Endpoint              | Description                   |
+|--------|-----------------------|-------------------------------|
+| POST   | `/captains/register`  | Registers a new captain.      |
+| POST   | `/captains/login`     | Logs in a captain.            |
+| POST   | `/captains/logout`    | Logs out the authenticated captain. |
+| GET    | `/captains/profile`   | Fetches captain's profile.    |
+
+---
+
+### General Notes:
+1. Use secure password hashing (e.g., `bcrypt`) for storing passwords.
+2. Ensure JWT tokens are securely generated and validated.
+3. Protect routes by verifying the token in the `Authorization` header.
+
