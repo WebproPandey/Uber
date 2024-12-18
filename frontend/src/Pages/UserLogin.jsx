@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import logo  from '../assets/BikeBuddy.png'
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {UserDataContext}  from '../Context/UserContext'
+import axios  from 'axios'
+
 
 const UserLogin = () => {
   const  [email , setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [userData , setUserData]  =   useState({})
+  const navigate = useNavigate()
+  const {user , setUser}   =  useContext(UserDataContext)
 
-  const submitHandler = (e) =>{
+  const submitHandler = async (e) =>{
     e.preventDefault();
-     setUserData({
+     const userData = ({
       email:email,
       password:password
      })     
-    setEmail('')
+     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login` , userData)
+     if(response.status === 200){
+        const  data = response.data 
+        setUser(data.user)
+        localStorage.setItem('token', data.token)
+        navigate('/home')
+     }
+
+
+     setEmail('')
     setPassword('')
     
   }
@@ -56,7 +69,7 @@ const UserLogin = () => {
           Sign Up
         </Link>
         </p>
-        <Link to='/Captain-Signup' className="bg-[#10b461] flex justify-center items-center  text-white rounded-lg p-2 w-full hover:bg-gray-800 transition mt-4">
+        <Link to='/Captain-Login' className="bg-[#10b461] flex justify-center items-center  text-white rounded-lg p-2 w-full hover:bg-gray-800 transition mt-4">
           Sign in as Captain
         </Link>
       </div>

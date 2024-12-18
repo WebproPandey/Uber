@@ -23,9 +23,9 @@ const CaptainLogin = () => {
     <div className=" rounded-t-lg w-full h-[20%]  flex justify-center items-center pt-12">
         <img className=" w-full  object-cover" src={Driverlogo} alt="" />
     </div>
-    <div className=" h-[80%] w-full bg-[#121212] rounded-tl-[50px] p-8">
-     <h2 className="text-2xl font-bold text-center mb-4 text-white">Login</h2>
-     <form  onSubmit={(e) => submitHandler(e)} className="flex flex-col">
+    <div className=" h-[80%] w-full bg-[#121212] flex flex-col justify-between items-center rounded-tl-[50px] px-6 pt-6  pb-2">
+     <h2 className="text-2xl font-bold text-center  text-white">Login</h2>
+     <form  onSubmit={(e) => submitHandler(e)} className="flex flex-col  w-full">
       <label className="mb-1 text-white">Email</label>
       <input
         type="email"
@@ -55,7 +55,7 @@ const CaptainLogin = () => {
         Register as a Captain
       </Link>
       </p>
-      <Link to='/Signup' className="bg-[#b48810] flex justify-center items-center  text-black font-semibold rounded-lg p-2 w-full hover:bg-gray-800 transition mt-4">
+      <Link to='/login' className="bg-[#b48810] flex justify-center items-center  text-black font-semibold rounded-lg p-2 w-full hover:bg-gray-800 transition mt-4">
         Sign in as User
       </Link>
     </div>

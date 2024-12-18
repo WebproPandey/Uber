@@ -1,24 +1,33 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import logo from "../assets/BikeBuddy.png";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios'
+import {UserDataContext} from "../Context/UserContext";
 const UserSignup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userData, setUserData] = useState({});
+  const  naviagate    =  useNavigate()
+  const {user , setUser}   =  useContext(UserDataContext)
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setUserData({
-      firstName:firstName,
-      lastName: lastName,
+   const  newUser = ({
+      fullname:{
+        firstname:firstName,
+        lastname: lastName,
+      },
       email: email,
       password: password,
     })
-    console.log(userData);
-    
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register` , newUser)
+    if(response.status === 201){
+      const data =  response.data
+      setUser(data.user)
+      localStorage.setItem('token', response.data.token)
+      naviagate('/home')
+    }
     setFirstName("");
     setLastName("");
     setEmail("");
@@ -72,7 +81,7 @@ const UserSignup = () => {
             placeholder="••••••••"
           />
           <button className="bg-black text-white rounded-lg p-2 hover:bg-gray-800 transition  placeholder:text-base">
-            SignUp
+            Create Account
           </button>
         </form>
         <p className="text-center text-sm text-gray-500 ">
@@ -81,7 +90,10 @@ const UserSignup = () => {
             Login
           </Link>
         </p>
-        <p className="text-[8px] leading-tight">By Proceeding,you consent to get calls , WhatApp or SMS messages , including by automated means , from BikeBuddy And its affilates to  the number provided.</p>
+        <p className="text-[8px] leading-tight">
+          This Site is Protected by reCAPTCHA and the  <span>Google Privacy Policy</span>  
+          and  <span>Terms of Service apply .</span> 
+        </p>
       </div>
     </div>
   );

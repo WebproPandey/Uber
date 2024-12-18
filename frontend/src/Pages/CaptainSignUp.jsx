@@ -13,8 +13,10 @@ const CaptainSignUp = () => {
     const submitHandler = (e) => {
       e.preventDefault();
       setCaptainData({
-        firstName:firstName,
-        lastName: lastName,
+        fullname:{
+          firstName:firstName,
+          lastName: lastName,
+        },
         email: email,
         password: password,
       })
@@ -30,8 +32,8 @@ const CaptainSignUp = () => {
     <div className=" rounded-t-lg w-full h-[20%]  flex justify-center items-center pt-12">
           <img className=" w-full  object-cover" src={Driverlogo} alt="" />
        </div>
-    <div className=" h-fit w-full bg-[#121212] rounded-tl-[50px] p-6">
-      <h2 className="text-2xl font-bold text-center mb-4 text-white">Sign up</h2>
+    <div className=" h-[80%] w-full bg-[#121212] flex flex-col  justify-between items-center rounded-tl-[50px] pt-6  px-6 pb-2">
+      <h2 className="text-2xl font-bold text-center  text-white">Sign up</h2>
       <form onSubmit={(e) => submitHandler(e)} className="flex flex-col">
         <label className="mb-1 text-white">What your Name</label>
           <div className="flex w-full gap-2 ">
@@ -71,7 +73,7 @@ const CaptainSignUp = () => {
           placeholder="••••••••"
         />
         <button className="bg-white text-black rounded-lg p-2 font-semibold hover:bg-gray-800 transition  placeholder:text-base">
-          SignUp
+          Create Account
         </button>
       </form>
       <p className="text-center text-sm text-white mt-4">
@@ -80,12 +82,10 @@ const CaptainSignUp = () => {
           Login
         </Link>
       </p>
-      <Link
-        to="/login"
-        className="bg-[#b48810] flex justify-center items-center  text-black font-semibold rounded-lg p-2 w-full hover:bg-gray-800 transition mt-4"
-      >
-        Login in as User
-      </Link>
+      <p className="text-[8px] leading-tight text-white">
+          This Site is Protected by reCAPTCHA and the  <span>Google Privacy Policy</span>  
+          and  <span>Terms of Service apply .</span> 
+        </p>
     </div>
   </div>
   )
