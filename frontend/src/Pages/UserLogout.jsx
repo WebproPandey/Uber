@@ -16,6 +16,10 @@ const UserLogout = () => {
           navigate('/login')
         }
     })
+    .catch(err =>{
+       console.log(err)
+       navigate('/login')
+    })
   return (
     <div>UserLogout</div>
   )
