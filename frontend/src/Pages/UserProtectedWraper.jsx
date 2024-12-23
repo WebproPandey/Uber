@@ -13,9 +13,7 @@ const UserProtectedWraper = ({children}) => {
     if (!token) {
       navigate("/login");
     }
-  }, [token, navigate]);
-
-  axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`,{
+    axios.get(`${import.meta.env.VITE_BASE_URL}/users/profile`,{
       headers: { Authorization: `Bearer ${token}` }
   }).then(response =>{
       if(response.status === 200){
@@ -28,6 +26,9 @@ const UserProtectedWraper = ({children}) => {
       navigate("/login");
   });
 
+  }, [token]);
+
+ 
   
 
  if(isLoading) {

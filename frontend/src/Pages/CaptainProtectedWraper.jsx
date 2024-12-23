@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useContext, useEffect } from "react";
+import { useContext, useEffect ,useState } from "react";
 import { CaptainDataContext } from "../Context/CaptainContext";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -15,9 +14,8 @@ const CaptainProtectedWraper = ({children}) => {
       if (!token) {
         navigate("/Captain-Login");
       }
-    }, [token, navigate]);
 
-    axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`,{
+      axios.get(`${import.meta.env.VITE_BASE_URL}/captains/profile`,{
         headers: { Authorization: `Bearer ${token}` }
     }).then(response =>{
         if(response.status === 200){
@@ -28,8 +26,12 @@ const CaptainProtectedWraper = ({children}) => {
     .catch(error => {
         localStorage.removeItem("token");
         navigate("/Captain-Login");
+        console.error(error.message);
     });
 
+    }, [token]);
+
+   
     
   
    if(isLoading) {
@@ -42,7 +44,7 @@ const CaptainProtectedWraper = ({children}) => {
     </>
     ) 
     
-  
+
 }
 
 export default CaptainProtectedWraper

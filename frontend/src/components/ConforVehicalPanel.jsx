@@ -4,7 +4,10 @@ const ConforVehicalPanel = (props) => {
   return (
     <div>
         <div className='w-full  shadow-lg flex flex-col justify-start items-center py-4 px-4 overflow-hidden '>
-          <div onClick={() =>  {props.setConformVehicalOpen(false)}}>
+          <div onClick={() =>
+            {
+                props.setConformVehicalOpen(false)
+            }}>
             <i   className="text-2xl   ri-arrow-down-wide-line"></i>
           </div>
           <div className=" w-full text-black text-lg text-start   ">
