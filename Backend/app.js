@@ -7,6 +7,7 @@ const cors =  require('cors')
 const  connectTodb  =  require("./db/db")
 const  userRoutes = require('./routes/userRoute') 
 const  captainRoutes  = require('./routes/captainRoute')
+const mapRoutes =  require("./routes/mapRoute")
 
 
 
@@ -23,5 +24,6 @@ app.get('/' , (req , res) =>{
 })
 app.use('/users' , userRoutes)
 app.use('/captains' , captainRoutes)
+app.use('/maps' , mapRoutes)
 
 module.exports =  app  
