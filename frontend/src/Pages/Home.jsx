@@ -3,6 +3,7 @@ import logo from "../assets/BikeBuddy.png";
 import { useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import axios from 'axios';
 import "remixicon/fonts/remixicon.css";
 import LocataionSearchPanel from "../components/LocataionSearchPanel";
 import VehicalPanel from "../components/VehicalPanel";
@@ -10,13 +11,16 @@ import ConforVehicalPanel from "../components/ConforVehicalPanel";
 import LookingForDriver from "../components/LookingForDriver";
 import WatingForDriver from "../components/WatingForDriver";
 const Home = () => {
-  const [pikup, setPinkup] = useState();
-  const [destination, setDestination] = useState();
+  const [pickup, setPickup] = useState("");
+  const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [VehicalPanelOpen ,setVehicalPanelOpen] = useState(false)
   const [ConformVehicalOpen , setConformVehicalOpen ] = useState(false)
   const [VehicalFound , setVehicalFound] =  useState(false)
   const [WatingForDrivers , setWatingForDrivers] =  useState(false)
+  const [pickupSuggestions , setPickupSuggestions] = useState([])
+  const [destinationSuggestions, setDestinationSuggestions] = useState([])
+  const [activeField ,setActiveField] = useState(null)
 
   const panelRef = useRef(null);
   const panleCloseRef = useRef(null);
@@ -25,6 +29,46 @@ const Home = () => {
   const VehicalFoundRef = useRef(null)  
   const WatingForDeiverRef =  useRef(null) 
 
+
+
+  const handlePickupChange =  async (e) =>{
+    setPickup(e.target.value)
+    try {
+      const response =  await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+        {params:{input: e.target.value },
+        headers:{
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+      
+      setPickupSuggestions(response.data.autoSuggestions);
+    console.log(response.data.autoSuggestions);
+
+      
+    } catch (error) {
+      console.log(error.message);
+      
+    }
+  }
+
+  const handleDestinationChange =  async (e) =>{
+    setDestination(e.target.value)
+    try {
+      const response =  await axios.get(`${import.meta.env.VITE_BASE_URL}/maps/get-suggestions`,
+        {params:{input: e.target.value},
+        headers:{
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+
+      setDestinationSuggestions(response.data.autoSuggestions);
+      console.log(response.data.autoSuggestions);
+      
+      
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
 
   const submitHandeler = (e) => {
@@ -118,9 +162,12 @@ const Home = () => {
             <div className="">
               <input
                 type="text"
-                onClick={() => {setPanelOpen(true)}}
-                value={pikup}
-                onChange={(e) => setPinkup(e.target.value)}
+                onClick={() => {setPanelOpen(true)
+                  setActiveField('pickup')
+
+                }}
+                value={pickup}
+                onChange={handlePickupChange}
                 className="w-full px-8  py-2 border rounded-md focus:outline-none bg-[#eee] focus:ring-2 focus:ring-black"
                 placeholder="Enter pick-up location"
                 required
@@ -129,9 +176,11 @@ const Home = () => {
             <div className="">
               <input
                 type="text"
-                onClick={() =>{ setPanelOpen(true)}}
+                onClick={() =>{ setPanelOpen(true)
+                  setActiveField('destination')
+                }}
                 value={destination}
-                onChange={(e) => setDestination(e.target.value)}
+                onChange={handleDestinationChange}
                 className="w-full px-8 py-2 border rounded-md focus:outline-none bg-[#eee] focus:ring-2 focus:ring-black"
                 placeholder="Enter drop-off location"
                 required
@@ -139,20 +188,28 @@ const Home = () => {
             </div>
           </form>
         </div>
-        <div ref={panelRef} className="h-0 w-full bg-white overflow-x-auto  ">
-          <LocataionSearchPanel   setPanelOpen={setPanelOpen} setVehicalPanel={setVehicalPanelOpen} />
+        <div ref={panelRef} className="h-0 w-full bg-white overflow-x-auto  z-[9999] ">
+          <LocataionSearchPanel   
+           suggestions={activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
+           setPanelOpen={setPanelOpen}
+           setVehiclePanel={setVehicalPanelOpen}
+           setPickup={setPickup}
+           setDestination={setDestination}
+           activeField={activeField}
+          />
         </div>
+        
       </div>
-      <div  ref={VehicalPanelRef} className="w-full fixed translate-y-full  bottom-0 bg-white rounded-md flex justify-center items-center z-[999] ">  
+      <div  ref={VehicalPanelRef} className="w-full fixed translate-y-full  bottom-0 bg-white rounded-md flex justify-center items-center z-10 ">  
        <VehicalPanel  setVehicalPanelOpen={setVehicalPanelOpen} setConformVehicalOpen={setConformVehicalOpen} />
      </div>
-     <div  ref={ConformVehicalRef} className="w-full fixed translate-y-full  bottom-0  bg-white rounded-md flex justify-center items-center z-[1000] ">  
+     <div  ref={ConformVehicalRef} className="w-full fixed translate-y-full  bottom-0  bg-white rounded-md flex justify-center items-center z-10 ">  
         <ConforVehicalPanel setConformVehicalOpen={setConformVehicalOpen}  setVehicalFound={setVehicalFound}/>
      </div>
-     <div ref={VehicalFoundRef}  className="w-full fixed   bottom-0  bg-white rounded-md flex justify-center items-center z-[1000] ">  
+     <div ref={VehicalFoundRef}  className="w-full fixed   bottom-0  bg-white rounded-md flex justify-center items-center z-10 ">  
        <LookingForDriver setVehicalFound={setVehicalFound} />
      </div>
-     <div  ref={WatingForDeiverRef} className="w-full fixed   bottom-0 translate-y-full  bg-white rounded-md flex justify-center items-center z-[1000] ">  
+     <div  ref={WatingForDeiverRef} className="w-full fixed   bottom-0 translate-y-full  bg-white rounded-md flex justify-center items-center z-10 ">  
         <WatingForDriver WatingForDrivers={WatingForDrivers}  />
      </div>
 
