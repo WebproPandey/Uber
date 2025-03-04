@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import logo from "../assets/BikeBuddy.png";
 import { useState } from "react";
 import { useGSAP } from "@gsap/react";
@@ -10,6 +10,9 @@ import VehicalPanel from "../components/VehicalPanel";
 import ConforVehicalPanel from "../components/ConforVehicalPanel";
 import LookingForDriver from "../components/LookingForDriver";
 import WatingForDriver from "../components/WatingForDriver";
+import { SocketContext } from "../Context/SocketContext"
+import {UserDataContext}  from  "../Context/UserContext"
+import { useContext } from "react";
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
@@ -23,14 +26,21 @@ const Home = () => {
   const [activeField, setActiveField] = useState(null);
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
-
-  const panelRef = useRef(null);
+  const panelRef = useRef(null);  
   const panleCloseRef = useRef(null);
   const VehicalPanelRef = useRef(null);
   const ConformVehicalRef = useRef(null);
   const VehicalFoundRef = useRef(null);
   const WatingForDeiverRef = useRef(null);
+  const { socket } = useContext(SocketContext)
+    const { user } = useContext(UserDataContext)
 
+    useEffect(() => {
+      if (user && user._id) { 
+          console.log("User Data:", user);
+          socket.emit("join", { userType: "user", userId: user._id });
+      }
+  }, [user]);
   const handlePickupChange = async (e) => {
     setPickup(e.target.value);
     try {

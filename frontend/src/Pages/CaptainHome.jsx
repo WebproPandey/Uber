@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState , useEffect } from 'react'
 import logo from "../assets/BikeBuddy.png";
 import { Link } from 'react-router-dom';
 import CaptainInfo from '../components/CaptainInfo';
@@ -6,6 +6,10 @@ import RidePopUp from '../components/RidePopUp';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import ConfirmRidePopup from '../components/ConfirmRidePopup';
+import { SocketContext } from "../Context/SocketContext"
+import { useContext } from "react";
+import { CaptainDataContext } from '../Context/CaptainContext';
+
 
 const CaptainHome = () => {
 
@@ -13,6 +17,17 @@ const [RidePopUpPanel , setRidePopUpPanel] = useState(true)
 const [ConfirmRidePopUpPanel , setConfirmRidePopUpPanel] = useState(false)
 const RidePopUpPanelRef  = useRef(null)
 const ConfirmRidePopUpPanelRef = useRef(null)
+
+const { socket } = useContext(SocketContext)
+const {Captain} = useContext(CaptainDataContext)
+
+useEffect(()=>{
+  socket.emit("join" ,{
+    userId:Captain.Id,
+    userType:'captain'
+  })
+},[])
+
 
 useGSAP(()=>{
   if(RidePopUpPanel){
