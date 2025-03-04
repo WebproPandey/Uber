@@ -2,20 +2,17 @@ const dotenv  =  require('dotenv')
 dotenv.config() 
 
 const express =  require('express')
-const  app = express()
+const app = express()
 const cors =  require('cors')
-const  connectTodb  =  require("./db/db")
-const  userRoutes = require('./routes/userRoute') 
-const  captainRoutes  = require('./routes/captainRoute')
+const connectTodb  =  require("./db/db")
+const cookieParser =  require('cookie-parser')  
+const userRoutes = require('./routes/userRoute') 
+const captainRoutes  = require('./routes/captainRoute')
 const mapRoutes =  require("./routes/mapRoute")
 const rideRoutes =  require("./routes/rideRoute")
-
-
-
-const   cookieParser =  require('cookie-parser')  
 connectTodb()
-app.use(cors())
 
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())

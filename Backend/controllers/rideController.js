@@ -18,3 +18,20 @@ module.exports.createRide = async (req, res, next) => {
 
 
 }
+
+
+module.exports.getFare = async (req, res) => {
+  try {
+    const { pickup, destination } = req.query;
+
+    if (!pickup || !destination) {
+      return res.status(400).json({ message: "Pickup and destination are required" });
+    }
+
+    const fareData = await rideService.getFare(pickup, destination);
+    return res.status(200).json(fareData);
+  } catch (error) {
+    console.error("Error fetching fare:", error.message);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};

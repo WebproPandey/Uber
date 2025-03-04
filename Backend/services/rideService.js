@@ -1,5 +1,6 @@
 const rideModel =  require("../models/rideModel")
 const mapService =  require("./mapService")
+const crypto = require("crypto")
 
 
 
@@ -8,7 +9,6 @@ async function getFare(pickup, destination) {
         throw new Error("Pickup and Destination are required");
     }
 
-    // Fetch distance and duration from map service
     const distanceData = await mapService.getDistanceTime(pickup, destination);
 
     if (!distanceData || !distanceData.distance || !distanceData.distance.value || 
@@ -16,33 +16,42 @@ async function getFare(pickup, destination) {
         throw new Error("Failed to fetch distance and duration");
     }
 
-    // Convert distance from meters to kilometers
     const distanceInKm = distanceData.distance.value / 1000;
     
-    // Convert duration from seconds to minutes
     const durationInMinutes = distanceData.duration.value / 60;
 
-    // Fare rates
-    const baseFare = { auto: 30, car: 50, motorcycle: 20 };
-    const perKmRate = { auto: 20, car: 15, motorcycle: 8 };
-    const perMinuteRate = { auto: 2, car: 3, motorcycle: 1.5 };
+    const baseFare = { auto: 30, car: 50, moto : 20 };
+    const perKmRate = { auto: 20, car: 15, moto : 8 };
+    const perMinuteRate = { auto: 2, car: 3, moto : 1.5 };
 
-    // Calculate fare for each vehicle type
     const fare = {
-        auto: baseFare.auto + (distanceInKm * perKmRate.auto) + (durationInMinutes * perMinuteRate.auto),
-        car: baseFare.car + (distanceInKm * perKmRate.car) + (durationInMinutes * perMinuteRate.car),
-        motorcycle: baseFare.motorcycle + (distanceInKm * perKmRate.motorcycle) + (durationInMinutes * perMinuteRate.motorcycle)
+        auto: Math.round(baseFare.auto + (distanceInKm * perKmRate.auto) + (durationInMinutes * perMinuteRate.auto)),
+        car: Math.round(baseFare.car + (distanceInKm * perKmRate.car) + (durationInMinutes * perMinuteRate.car)),
+        moto : Math.round(baseFare.moto  + (distanceInKm * perKmRate.moto ) + (durationInMinutes * perMinuteRate.moto ))
     };
 
     return {
         pickup,
         destination,
-        distance: distanceInKm.toFixed(2),  // Keeping numeric format
-        duration: durationInMinutes.toFixed(2), // Keeping numeric format
+        distance: distanceInKm.toFixed(2), 
+        duration: durationInMinutes.toFixed(2),
         fare
     };
 }
-module.exports.createRide = async ({user, pickup, destination , vehicleType}) => {
+
+module.exports.getFare =  getFare
+
+function getOtp(num) {
+    function generateOtp(num) {
+        const otp =  crypto.randomInt(Math.pow(10 , num -1) , Math.pow(10, num)).toString();
+        return otp;
+    }
+    return generateOtp(num);
+
+}
+
+
+module.exports.createRide = async ({user, pickup, destination , vehicleType }) => {
     if (!user || !pickup || !destination || !vehicleType){
         throw new Error('All Fields are required')
     }
@@ -51,6 +60,7 @@ module.exports.createRide = async ({user, pickup, destination , vehicleType}) =>
         user,
         pickup,
         destination,
+        otp: getOtp(6),
         fare: fare.fare[vehicleType]
     })
     return ride;
