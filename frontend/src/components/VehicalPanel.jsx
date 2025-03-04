@@ -17,6 +17,7 @@ const VehicalPanel = (props) => {
         <div className="p-4">
           <div onClick={()=>{
             props.setConformVehicalOpen(true)
+            props.selectVehicle('auto')
           }} className="border active:border-black  rounded-lg mb-4  p-2">
             <div className="flex justify-between items-center   ">
               <div className="img h-12 w-16 ">
@@ -28,7 +29,7 @@ const VehicalPanel = (props) => {
               <p className="text-[4vw] text-gray-500">Affordable, Compact rides</p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold text-green-600">₨ 100</p>
+                <p className="text-sm font-semibold text-green-600">₨ {props.fare.auto}</p>
                 <p className="text-sm line-through text-gray-400">₨ 130</p>
               </div>
             </div>
@@ -37,6 +38,8 @@ const VehicalPanel = (props) => {
 
           <div onClick={()=>{
             props.setConformVehicalOpen(true)
+            props.selectVehicle('moto')
+
           }} 
           className="border active:border-black  rounded-lg mb-4 p-2">
             <div className="flex justify-between items-center">
@@ -48,8 +51,8 @@ const VehicalPanel = (props) => {
               <p className="text-[4vw] text-gray-500">2 min away • 1 seats</p>
               <p className="text-[4vw] text-gray-500">Affordable, Compact rides</p>
               </div>
-              <div className="text-right">
-                <p className="text-sm font-semibold text-green-600">₨ 64</p>
+              <div className="text-right bg-slate-100">
+                <p className="text-sm font-semibold text-green-600">₨ {props.fare.moto}</p>
                 <p className="text-sm line-through text-gray-400">₨ 130</p>
               </div>
             </div>
@@ -57,6 +60,8 @@ const VehicalPanel = (props) => {
 
           <div onClick={()=>{
             props.setConformVehicalOpen(true)
+            props.selectVehicle('car')
+
           }} 
           className="border  active:border-black  rounded-lg  p-2">
             <div className="flex justify-between items-center">
@@ -69,7 +74,7 @@ const VehicalPanel = (props) => {
               <p className="text-[4vw] text-gray-500">Affordable, Compact rides</p>
               </div>
               <div className="text-right">
-                <p className="text-sm font-semibold text-green-600">₨ 120</p>
+                <p className="text-sm font-semibold text-green-600">₨ {props.fare.car}</p>
                 <p className="text-sm line-through text-gray-400">₨ 150</p>
               </div>
             </div>

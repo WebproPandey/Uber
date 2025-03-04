@@ -23,7 +23,7 @@ const LookingForDriver = (props ) => {
               </div>
               <div className='border-b-2 py-2'>
                 <h1 className='font-semibold'>562/11-A</h1>
-                <p>KailKondrahalli,Bengaluru, Karnataka</p>
+                <p>{props.pickup}</p>
               </div>
            </div>
            <div className='Destiationlocation w-full flex  justify-start items-center gap-2 '>
@@ -32,7 +32,7 @@ const LookingForDriver = (props ) => {
               </div>
               <div className='border-b-2 py-2'>
                 <h1 className='font-semibold'>Third Wave Coffee</h1>
-                <p className='leading-tight tracking-tighter'>17th cross Rd , PWD Quarters ,1st Sector ,HSR Layout. Bangaluru , Karnataka</p>
+                <p className='leading-tight tracking-tighter'>{props.destination}</p>
               </div>
            </div>
            <div className='Cash w-full flex  justify-start items-center gap-2 '>
@@ -40,7 +40,7 @@ const LookingForDriver = (props ) => {
                 <i className="-[5vw] ri-bank-card-2-fill"></i>
               </div>
               <div className=' py-2'>
-                <h1 className='font-semibold'>₨ 120.20</h1>
+                <h1 className='font-semibold'>₨ {props.fare[props.vehicleType]}</h1>
                 <h1 className='leading-tight tracking-tighter'> Case Case</h1>
               </div>
            </div>

@@ -130,8 +130,8 @@ const CaptainSignUp = () => {
                 Select Vehicle Type
               </option>
               <option value="car">Car</option>
-              <option value="motorcycle">Bike</option>
-              <option value="auto">Moto</option>
+              <option value="motorcycle">moto</option>
+              <option value="auto">auto</option>
             </select>
           </div>
           <button className="bg-white text-black rounded-lg p-2 font-semibold hover:bg-gray-800 transition  placeholder:text-base">
