@@ -37,7 +37,7 @@ const Home = () => {
 
     useEffect(() => {
       if (user && user._id) { 
-          console.log("User Data:", user);
+          // console.log("User Data:", user);
           socket.emit("join", { userType: "user", userId: user._id });
       }
   }, [user]);
@@ -306,7 +306,7 @@ const Home = () => {
       </div>
       <div
         ref={WatingForDeiverRef}
-        className="w-full fixed   bottom-0  bg-white rounded-md flex justify-center items-center  "
+        className="w-full fixed   bottom-0 translate-y-full  bg-white rounded-md flex justify-center items-center  "
       >
         <WatingForDriver WatingForDrivers={WatingForDrivers} />
       </div>
