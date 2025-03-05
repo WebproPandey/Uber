@@ -16,7 +16,7 @@ const RidePopUp = (props) => {
           <div className="flex border-b-2   w-full  justify-between items-center bg-yellow-300 p-1 rounded-md">
           <div className="Captainiamge flex justify-center gap-2 items-center py-2">
            <img className='h-[10vh]  rounded-full  w-[10vh] object-cover' src="https://i.pinimg.com/236x/84/52/8f/84528f46fb35000e745e82f6cc2b4a58.jpg" alt="" />
-           <h1>CaptainName</h1>
+           <h1>{props.ride?.user.fullname.firstname + "" + props.ride?.user.fullname.lastname  }</h1>
           </div>
           <h1 className="font-bold">2.2KM</h1>
           </div>
@@ -27,7 +27,7 @@ const RidePopUp = (props) => {
             </div>
             <div className="border-b-2 py-2">
               <h1 className="font-semibold">562/11-A</h1>
-              <p>KailKondrahalli,Bengaluru, Karnataka</p>
+              <p>{props.ride?.pickup}</p>
             </div>
           </div>
           <div className="Destiationlocation w-full flex  justify-start items-center gap-2 ">
@@ -37,8 +37,7 @@ const RidePopUp = (props) => {
             <div className="border-b-2 py-2">
               <h1 className="font-semibold">Third Wave Coffee</h1>
               <p className="leading-tight tracking-tighter">
-                17th cross Rd , PWD Quarters ,1st Sector ,HSR Layout. Bangaluru
-                , Karnataka
+                {props.ride?.destination}
               </p>
             </div>
           </div>
@@ -47,7 +46,7 @@ const RidePopUp = (props) => {
               <i className="-[5vw] ri-bank-card-2-fill"></i>
             </div>
             <div className=" py-2">
-              <h1 className="font-semibold">₨ 120.20</h1>
+              <h1 className="font-semibold">₨ {props.ride?.fare}</h1>
               <h1 className="leading-tight tracking-tighter"> Case Case</h1>
             </div>
           </div>
@@ -63,6 +62,7 @@ const RidePopUp = (props) => {
             <button 
               onClick={() =>{
                 props.setConfirmRidePopUpPanel(true);
+                props.confirmRide()
               }}
             className="w-full  text-center bg-green-500 text-white  font-bold capitalize py-2 rounded-lg">
               Accept

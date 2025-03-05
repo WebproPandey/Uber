@@ -9,6 +9,7 @@ router.post("/create" ,
     body("destination").isString().isLength({min: 3}).withMessage("invalid destination address"),
     body("vehicleType").isString().isIn(['auto' , 'car' , 'moto']).withMessage("invalid distance"),
     authMiddleware.authUser,
+    
     rideController.createRide
 
 )
@@ -19,5 +20,11 @@ router.get("/get-fare" ,
     authMiddleware.authUser,
     rideController.getFare
 
+)
+
+router.post("/confirm" , 
+    body('rideId').isMongoId().withMessage("invalid ride id"),
+    authMiddleware.authCaptaine,
+    rideController.confirmRide
 )
 module.exports = router

@@ -81,6 +81,10 @@ const Home = () => {
     }
   };
 
+  socket.on('ride_accepted' , ride =>  {
+    setWatingForDrivers(true)
+  })
+
   const submitHandeler = (e) => {
     e.preventDefault();
   };

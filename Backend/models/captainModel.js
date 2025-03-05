@@ -27,7 +27,7 @@ const captainSchema = new mongoose.Schema({
     select:false,
     minlength:[8 , 'Password must be at least 8 characters  long'],
    },
-   sockeId:{
+   socketId:{  // ✅ Correct spelling
     type:String,
    },
    status:{
@@ -57,7 +57,7 @@ const captainSchema = new mongoose.Schema({
     }
    },
    location:{
-    lat:{
+    ltd:{
         type:Number,
     },
     lng:{

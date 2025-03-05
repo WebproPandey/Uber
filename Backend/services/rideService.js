@@ -1,4 +1,5 @@
-const rideModel =  require("../models/rideModel")
+const rideModel =  require("../models/rideModel");
+const { sendMessageToSocketID } = require("../Socket");
 const mapService =  require("./mapService")
 const crypto = require("crypto")
 
@@ -65,4 +66,29 @@ module.exports.createRide = async ({user, pickup, destination , vehicleType }) =
     })
     return ride;
 
+}
+
+
+module.exports.confirmRide = async ({rideId ,captain}) =>{
+    if(!rideId){
+        throw new Error('Ride ID is required')
+    }
+    await  rideModel.findOneAndUpdate({_id:rideId},{
+        status: 'accepted',
+        captain: captain._id
+
+    })
+
+    const ride = await rideModel.findOne({_id:rideId}).populate('user')
+    sendMessageToSocketID(ride.user.socketId,{
+        type: 'ride_accepted',
+        data:ride
+    })
+
+
+
+    if(!ride){
+        throw new Error('Ride not found')
+    }
+    return ride;
 }

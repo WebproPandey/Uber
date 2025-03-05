@@ -1,4 +1,5 @@
 const axios = require("axios");
+const captainModel = require("../models/captainModel")
 
 module.exports.getAddressCoordinate = async (address) => {
     if (!address) {
@@ -13,8 +14,8 @@ module.exports.getAddressCoordinate = async (address) => {
             if (response.data.status === "OK") {
                 const loaction = response.data.results[0].geometry.location;
                 return {
-                     latitude: loaction.lat,
-                     longitude: loaction.lng 
+                     ltd: loaction.lat,
+                     lng: loaction.lng 
                     };
             } else {
                 throw new Error(`Geocode API error: ${response.data.error?.message || response.data.status}`);
@@ -74,4 +75,20 @@ module.exports.getAutoSuggestions = async  (input) =>{
         throw new Error("Failed to fetch auto suggestions");
     }
 
+}
+
+
+module.exports.getcaptainsInTheRadius = async (ltd, lng , radius) => {
+    if (!ltd ||!lng ||!radius) {
+        throw new Error("Latitude, longitude and radius are required");
+    }
+    const captains  = await captainModel.find({
+        location:{
+            $geoWithin:{
+                $centerSphere: [ [ltd, lng], radius / 6371 ] 
+            }
+        }
+    })
+    return captains;
+ 
 }
