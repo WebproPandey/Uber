@@ -5,7 +5,7 @@ function  connectTOdb () {
     .then(() =>{
         console.log("connect to db");
     }).catch(err =>{
-        console.log(err);
+        console.log(err.message);
         
     })
 }

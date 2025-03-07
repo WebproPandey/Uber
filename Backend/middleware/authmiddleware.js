@@ -7,22 +7,27 @@ module.exports.authUser = async (req, res, next) => {
     const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'Token not found, Unauthorized' });
+        return res.status(401).json({ message: "No token provided, Unauthorized" });
     }
-    const isBlackListed =  await blackListModel.findOne({token : token})
+
+    const isBlackListed = await blackListModel.findOne({ token: token });
     if (isBlackListed) {
-        return res.status(401).json({ message: 'Token has been blacklisted, Unauthorized' });
+        return res.status(401).json({ message: "Token has been blacklisted, Unauthorized" });
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log("Decoded Token:", decoded); // Debugging log
 
         const user = await userModel.findById(decoded._id);
-        req.user = user;
+        if (!user) {
+            return res.status(401).json({ message: "User not found, Unauthorized" });
+        }
 
-        return  next()
+        req.user = user;
+        next();
     } catch (err) {
-        return res.status(401).json({ message: 'Unauthorized', error: err.message })
+        return res.status(401).json({ message: "Unauthorized", error: err.message });
     }
 };
 

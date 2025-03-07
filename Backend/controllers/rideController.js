@@ -18,7 +18,8 @@ module.exports.createRide = async (req, res, next) => {
         const captainsInRaduis = await mapService.getcaptainsInTheRadius(pickupCoordinates.ltd , pickupCoordinates.lng, 2000)
         ride.otp = ""
         const rideWithUser =  await rideModel.findOne({_id: ride._id}).populate('user') 
-        captainsInRaduis.map(  captain => {
+
+        captainsInRaduis.map(captain => {
           console.log(captain, ride)
           sendMessageToSocketID(captain.socketId,{
             event:'new-ride',
@@ -27,7 +28,7 @@ module.exports.createRide = async (req, res, next) => {
         })
     }catch (err) {
         console.error(err)
-        return res.status(500).json({error: 'Server Error'})
+        return res.status(500).json({error: err.message})
     
     }
 
@@ -59,6 +60,11 @@ module.exports.confirmRide=  async (req, res) =>{
   const {rideId} = req.body
   try{
     const ride = await rideService.confirmRide({rideId, captain:req.captain})
+    sendMessageToSocketID(ride.user.socketId,{
+            event: 'ride-confirmed',
+            data:ride
+        })
+        
     if(!ride){
       return res.status(404).json({message: 'Ride not found'})
     }
@@ -67,4 +73,29 @@ module.exports.confirmRide=  async (req, res) =>{
     console.error(err.message)
     return res.status(500).json({error: 'Server Error'})
   }
+}
+
+
+module.exports.startRide =  async (req, res) =>{
+  const error = validationResult(req)
+  if (!error.isEmpty()) {
+    return res.status(400).json({ errors: error.array() });
+  }
+  const {rideId , otp} = req.query
+  try{
+    const ride = await rideService.startRide({rideId, otp,captain:req.captain})
+    sendMessageToSocketID(ride.user.socketId,{
+            event: 'ride-started',
+            data:ride
+        })
+        
+    if(!ride){
+      return res.status(404).json({message: 'OTP not found'})
+    }
+    res.status(200).json(ride)
+  }catch(err){
+    console.error(err.message)
+    return res.status(500).json({error: 'Server Error'})
+  }
+
 }
