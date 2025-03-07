@@ -54,7 +54,6 @@ const RidePopUp = (props) => {
             <button 
              onClick={() =>{
                 props.setRidePopUpPanel(false);
-
              }}
             className="w-full  text-center text-black  bg-gray-300   font-bold capitalize py-2 rounded-lg">
               Reject

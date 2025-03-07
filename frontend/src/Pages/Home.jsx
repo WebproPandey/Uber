@@ -13,6 +13,8 @@ import WatingForDriver from "../components/WatingForDriver";
 import { SocketContext } from "../Context/SocketContext"
 import {UserDataContext}  from  "../Context/UserContext"
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import LiveTracking from "../components/LiveTracking";
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
@@ -26,6 +28,11 @@ const Home = () => {
   const [activeField, setActiveField] = useState(null);
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
+  const [ride, setRide] =  useState(null) 
+  const navigate = useNavigate()
+
+
+
   const panelRef = useRef(null);  
   const panleCloseRef = useRef(null);
   const VehicalPanelRef = useRef(null);
@@ -36,7 +43,7 @@ const Home = () => {
     const { user } = useContext(UserDataContext)
 
     useEffect(() => {
-      if (user && user._id) { 
+      if (user && user._id) {  
           // console.log("User Data:", user);
           socket.emit("join", { userType: "user", userId: user._id });
       }
@@ -81,13 +88,20 @@ const Home = () => {
     }
   };
 
-  socket.on('ride_accepted' , ride =>  {
+  socket.on('ride-confirmed' , ride =>  { 
+    setVehicalFound(false)
     setWatingForDrivers(true)
+    setRide(ride)
   })
 
+  socket.on('ride-started', ride => {
+    setWatingForDrivers(false)
+    navigate('/riding', { state: { ride } })  
+})
   const submitHandeler = (e) => {
     e.preventDefault();
   };
+   
   useGSAP(() => {
     if (panelOpen) {
       gsap.to(panelRef.current, {
@@ -189,18 +203,19 @@ const Home = () => {
       })
 
       console.log(response.data);
-      
-
-
   }
   
 
   return (
-    <div className=" h-screen  w-full relative overflow-hidden bg-coverbg-center bg-[url('https://i.pinimg.com/736x/22/1b/42/221b42fa58ead3ffba876fb0d24cc113.jpg')]">
-      <div className="w-full flex justify-center items-center  relative  z-[8]">
+    <div className=" h-screen  w-full relative overflow-hidden ">
+      <div className="h-full  w-full relative ">
+           <LiveTracking/>
+      </div>
+      <div className="">
+      <div className="w-full flex justify-center items-center  absolute     z-10">
         <img className="w-[8rem] filter invert" src={logo} alt="" />
       </div>
-      <div className="h-screen  w-full absolute flex flex-col  justify-end  top-0 left-0      ">
+      <div className="h-screen  w-full absolute  flex flex-col   justify-end  top-0 left-0      ">
         <div className="h-fit w-full bg-white  rounded-tl-md rounded-tr-md  px-4 py-2 flex flex-col  gap-2 relative">
           <h5
             ref={panleCloseRef}
@@ -276,7 +291,7 @@ const Home = () => {
         className="w-full fixed translate-y-full  bottom-0 bg-white rounded-md flex justify-center items-center z-10 "
       >
         <VehicalPanel
-        selectVehicle={setVehicleType}
+          selectVehicle={setVehicleType}
           fare={fare}
           setVehicalPanelOpen={setVehicalPanelOpen}
           setConformVehicalOpen={setConformVehicalOpen}
@@ -306,14 +321,22 @@ const Home = () => {
          destination={destination}
          fare={fare}
          vehicleType={vehicleType}
-        setVehicalFound={setVehicalFound} />
+         setVehicalFound={setVehicalFound} />
       </div>
       <div
         ref={WatingForDeiverRef}
-        className="w-full fixed   bottom-0 translate-y-full  bg-white rounded-md flex justify-center items-center  "
+        className="w-full fixed   bottom-0    translate-y-full  bg-white rounded-md flex justify-center items-center z-10  "
       >
-        <WatingForDriver WatingForDrivers={WatingForDrivers} />
+        <WatingForDriver
+         ride={ride}
+         setVehicleFound={setVehicalFound}
+         setWaitingForDriver={setWatingForDrivers}
+         waitingForDriver={WatingForDrivers} />
+         
       </div>
+
+      </div>
+    
     </div>
   );
 };

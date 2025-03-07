@@ -5,7 +5,9 @@ const WatingForDriver = (props) => {
     <div>
         <div className='w-full shadow-lg flex flex-col justify-start items-center py-2 px-4 overflow-hidden '>
           <div onClick={() =>  {
-            props.WatingForDrivers(true)}}>
+            props.setWaitingForDriver(true)
+            }}
+            >
             <i   className="text-2xl   ri-arrow-down-wide-line"></i>
           </div>
           <div className=" w-full flex justify-between items-center pb-2  ">
@@ -25,10 +27,10 @@ const WatingForDriver = (props) => {
               </div>
               </div>
               <div className="CaptainInfo h-full  flex flex-col  justify-center items-end">
-                <h2 className='text-[4vw] text-[#bdbdbd]'>CaptainName</h2>
-                <h1 className='text-[6vw]  font-bold'> UP-70-tb-7200</h1>
-                <h2  className='text-[5vw] text-black tracking-tighter'>Baja RE, AutoRickshaw</h2>
-                 <span><i className="ri-star-fill"></i>4.5</span>
+                <h2 className='text-[4vw] text-[#bdbdbd] capitalize'>{props.ride?.captain.fullname.firstname}</h2>
+                <h1 className='text-[6vw]  font-bold capitalize'> {props.ride?.captain.vehicle.plate}</h1>
+                <h2  className='text-[5vw] text-black tracking-tighter'>{props.ride?.captain?.vehicle?.vehicleType}</h2>
+                 <span>{props.ride?.otp}</span>
               </div>
             </div>
            <div className='Currentlocation w-full flex  justify-start items-center gap-2 '>
@@ -37,7 +39,7 @@ const WatingForDriver = (props) => {
               </div>    
               <div className='border-b-2 py-2'>
                 <h1 className='font-semibold'>562/11-A</h1>
-                <p>KailKondrahalli,Bengaluru, Karnataka</p>
+                <p>{props.ride?.pickup}</p>
               </div>
            </div>
            <div className='Destiationlocation w-full flex  justify-start items-center gap-2 '>
@@ -46,7 +48,7 @@ const WatingForDriver = (props) => {
               </div>
               <div className='border-b-2 py-2'>
                 <h1 className='font-semibold'>Third Wave Coffee</h1>
-                <p className='leading-tight tracking-tighter'>17th cross Rd , PWD Quarters ,1st Sector ,HSR Layout. Bangaluru , Karnataka</p>
+                <p className='leading-tight tracking-tighter'>{props.ride?.destination}</p>
               </div>
            </div>
            <div className='Cash w-full flex  justify-start items-center gap-2 '>
@@ -54,7 +56,7 @@ const WatingForDriver = (props) => {
                 <i className="-[5vw] ri-bank-card-2-fill"></i>
               </div>
               <div className=' py-2'>
-                <h1 className='font-semibold'>₨ 120.20</h1>
+                <h1 className='font-semibold'>₨{props.ride?.fare}</h1>
                 <h1 className='leading-tight tracking-tighter'> Case Case</h1>
               </div>
            </div>

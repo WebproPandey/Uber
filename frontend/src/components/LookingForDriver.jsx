@@ -23,7 +23,7 @@ const LookingForDriver = (props ) => {
               </div>
               <div className='border-b-2 py-2'>
                 <h1 className='font-semibold'>562/11-A</h1>
-                <p>{props.pickup}</p>
+                <p>{props?.pickup}</p>
               </div>
            </div>
            <div className='Destiationlocation w-full flex  justify-start items-center gap-2 '>
@@ -32,7 +32,7 @@ const LookingForDriver = (props ) => {
               </div>
               <div className='border-b-2 py-2'>
                 <h1 className='font-semibold'>Third Wave Coffee</h1>
-                <p className='leading-tight tracking-tighter'>{props.destination}</p>
+                <p className='leading-tight tracking-tighter'>{props?.destination}</p>
               </div>
            </div>
            <div className='Cash w-full flex  justify-start items-center gap-2 '>

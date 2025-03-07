@@ -9,9 +9,10 @@ import ConfirmRidePopup from "../components/ConfirmRidePopup";
 import { SocketContext } from "../Context/SocketContext";
 import { CaptainDataContext } from "../Context/CaptainContext";
 import axios from "axios";
+import LiveTracking from "../components/LiveTracking";
 
 const CaptainHome = () => {
-  const [RidePopUpPanel, setRidePopUpPanel] = useState(true);
+  const [RidePopUpPanel, setRidePopUpPanel] = useState(false);
   const [ConfirmRidePopUpPanel, setConfirmRidePopUpPanel] = useState(false);
   const RidePopUpPanelRef = useRef(null);
   const ConfirmRidePopUpPanelRef = useRef(null);
@@ -23,7 +24,6 @@ const CaptainHome = () => {
   useEffect(() => {
 
     if (Captain && Captain._id) {
-      console.log(Captain)
       socket.emit("join", {
         userId: Captain._id,
         userType: "captain",
@@ -56,10 +56,10 @@ const CaptainHome = () => {
   }, [Captain, socket]); 
 
   socket.on('new-ride' ,(data) =>{
-    console.log("data:",data)
     setRide(data)
     setRidePopUpPanel(true)
   })
+  
   async function confirmRide (){
    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/rides/confirm`,{
     rideId:ride._id,
@@ -70,6 +70,7 @@ const CaptainHome = () => {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
   })
+  console.log(response.data)
    setRidePopUpPanel(false)
    setConfirmRidePopUpPanel(true)
   }
@@ -88,7 +89,10 @@ const CaptainHome = () => {
   }, [ConfirmRidePopUpPanel]);
 
   return (
-    <div className="h-screen w-full relative bg-cover bg-center bg-[url('https://i.pinimg.com/736x/22/1b/42/221b42fa58ead3ffba876fb0d24cc113.jpg')]">
+    <div className="h-screen w-full relative ">
+      <div className="h-full  w-full  absolute  top-0  left-0">
+       <LiveTracking/>
+      </div>
       <div className="flex items-center justify-between w-full px-2 py-1">
         <div className="w-full flex justify-start items-center relative z-[8]">
           <img className="w-[8rem] filter invert" src={logo} alt="" />
@@ -111,7 +115,10 @@ const CaptainHome = () => {
         />
       </div>
       <div ref={ConfirmRidePopUpPanelRef} className="w-full fixed bottom-0 -translate-y-full bg-white rounded-md flex justify-center items-center z-[1000]">
-        <ConfirmRidePopup setConfirmRidePopUpPanel={setConfirmRidePopUpPanel} setRidePopUpPanel={setRidePopUpPanel} />
+        <ConfirmRidePopup 
+        ride={ride}
+        setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}
+        setRidePopUpPanel={setRidePopUpPanel} />
       </div>
     </div>
   );
